@@ -1,0 +1,654 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>db_VarianceSwap.mat (editing)</title>
+    <link id="favicon" rel="shortcut icon" type="image/x-icon" href="/lab/code/python/user/muyu0117@live.cn/static/base/images/favicon-file.ico?v=e2776a7f45692c839d6eea7d7ff6f3b2">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="/lab/code/python/user/muyu0117@live.cn/static/components/jquery-ui/themes/smoothness/jquery-ui.min.css?v=9b2c8d3489227115310662a343fce11c" type="text/css" />
+    <link rel="stylesheet" href="/lab/code/python/user/muyu0117@live.cn/static/components/jquery-typeahead/dist/jquery.typeahead.min.css?v=7afb461de36accb1aa133a1710f5bc56" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+<link rel="stylesheet" href="/lab/code/python/user/muyu0117@live.cn/static/components/codemirror/lib/codemirror.css?v=ae81317fa2b3a745892c83985827d41b">
+<link rel="stylesheet" href="/lab/code/python/user/muyu0117@live.cn/static/components/codemirror/addon/dialog/dialog.css?v=c89dce10b44d2882a024e7befc2b63f5">
+
+    <link rel="stylesheet" href="/lab/code/python/user/muyu0117@live.cn/static/style/style.min.css?v=d87994e2e71f4741e4c4e3af747f9875" type="text/css"/>
+    
+
+    <link rel="stylesheet" href="/lab/code/python/user/muyu0117@live.cn/custom/custom.css" type="text/css" />
+    <script src="/lab/code/python/user/muyu0117@live.cn/static/components/es6-promise/promise.min.js?v=f004a16cb856e0ff11781d01ec5ca8fe" type="text/javascript" charset="utf-8"></script>
+    <script src="/lab/code/python/user/muyu0117@live.cn/static/components/preact/index.js?v=5b98fce8b86ce059de89f9e728e16957" type="text/javascript"></script>
+    <script src="/lab/code/python/user/muyu0117@live.cn/static/components/proptypes/index.js?v=c40890eb04df9811fcc4d47e53a29604" type="text/javascript"></script>
+    <script src="/lab/code/python/user/muyu0117@live.cn/static/components/preact-compat/index.js?v=d376eb109a00b9b2e8c0d30782eb6df7" type="text/javascript"></script>
+    <script src="/lab/code/python/user/muyu0117@live.cn/static/components/requirejs/require.js?v=6da8be361b9ee26c5e721e76c6d4afce" type="text/javascript" charset="utf-8"></script>
+    <script>
+      require.config({
+          
+          urlArgs: "v=20180119210427",
+          
+          baseUrl: '/lab/code/python/user/muyu0117@live.cn/static/',
+          paths: {
+            'auth/js/main': 'auth/js/main.min',
+            custom : '/lab/code/python/user/muyu0117@live.cn/custom',
+            nbextensions : '/lab/code/python/user/muyu0117@live.cn/nbextensions',
+            kernelspecs : '/lab/code/python/user/muyu0117@live.cn/kernelspecs',
+            underscore : 'components/underscore/underscore-min',
+            backbone : 'components/backbone/backbone-min',
+            jed: 'components/jed/jed',
+            // jquery: 'components/jquery/jquery.min',
+            json: 'components/requirejs-plugins/src/json',
+            text: 'components/requirejs-text/text',
+            bootstrap: 'components/bootstrap/js/bootstrap.min',
+            bootstraptour: 'components/bootstrap-tour/build/js/bootstrap-tour.min',
+            'jquery-ui': 'components/jquery-ui/ui/minified/jquery-ui.min',
+            moment: 'components/moment/min/moment-with-locales',
+            codemirror: 'components/codemirror',
+            termjs: 'components/xterm.js/dist/xterm',
+            typeahead: 'components/jquery-typeahead/dist/jquery.typeahead.min',
+          },
+          map: { // for backward compatibility
+              "*": {
+                  "jqueryui": "jquery-ui",
+              }
+          },
+          shim: {
+            typeahead: {
+              deps: ["jquery"],
+              exports: "typeahead"
+            },
+            underscore: {
+              exports: '_'
+            },
+            backbone: {
+              deps: ["underscore", "jquery"],
+              exports: "Backbone"
+            },
+            bootstrap: {
+              deps: ["jquery"],
+              exports: "bootstrap"
+            },
+            bootstraptour: {
+              deps: ["bootstrap"],
+              exports: "Tour"
+            },
+            "jquery-ui": {
+              deps: ["jquery"],
+              exports: "$"
+            }
+          },
+          waitSeconds: 30,
+      });
+
+      require.config({
+          map: {
+              '*':{
+                'contents': 'services/contents',
+              }
+          }
+      });
+
+      define("bootstrap", function () {
+          return window.$;
+      });
+
+      define("jquery", function () {
+          return window.$;
+      });
+
+      define("jqueryui", function () {
+          return window.$;
+      });
+
+      define("jquery-ui", function () {
+          return window.$;
+      });
+      // error-catching custom.js shim.
+      define("custom", function (require, exports, module) {
+          try {
+              var custom = require('custom/custom');
+              console.debug('loaded custom.js');
+              return custom;
+          } catch (e) {
+              console.error("error loading custom.js", e);
+              return {};
+          }
+      })
+    </script>
+
+    
+    
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:400,400i,700" rel="stylesheet">
+<style>
+	/* da togliere */
+	body {overflow:hidden;}
+	div#header {background: #47b4af !important; -webkit-box-shadow: none !important;box-shadow: none !important; position:relative; top:-20px;}
+	div#header-container {width: 1156px; height:40px;}
+	#save_widget {position:absolute; left:35px;}
+	#kernel_logo_widget {position:absolute; right: 12px;}
+	#ipython_notebook {float:right !important; margin-right:8px;}
+	#save_widget {position:static; left:0; float: right !important;margin-right: 20px;margin-top: 4px;}
+	span.save_widget span.filename {margin-left:0 !important;}
+	#site {position:relative; top:-20px;}
+	#notebook-container, #texteditor-backdrop #texteditor-container {position:relative; left:8px;}
+
+	HEADER {font-family: 'Ubuntu', sans-serif; font-weight:bold; font-size:14px; letter-spacing:-0.5px; margin-bottom:10px; position:relative; top:-10px;}
+
+	#header-top 	{height:100px; background:#fff; box-sizing:border-box;  width:100%; border:0px solid red;}
+		SECTION#section-sx {margin-top:30px; float:left; }
+			#header-logo {margin-left:24px;}
+
+		SECTION#section-dx {margin-top:22px; float:left; font-size:13px; }
+			#header-social 		{margin-left:20px;  }
+				.header-text	{margin-bottom:5px; }
+				.header-icon	{}
+					.img-social		{margin:1.8px; }
+			#header-newsletter 	{margin-left:45px; width:202px; height:50px; background:url(<?php echo PATH?>imgheader/news_back_in.png) no-repeat bottom; position:relative; }
+				.header-form	{position:relative; top:7px; left:7px; text-align:left;}
+					#mce-EMAIL	{border:0px solid red; background:transparent; width:170px; }
+			#header-login 		{margin-left:35px;}
+
+
+	#header-bottom 	{height:45px;  background:#3C9591; box-sizing:border-box;}
+	.onLeft 		{display:inline-block;}
+   	.header-container	{margin: 0 auto; max-width: 1030px;}
+   	.header-text	{font-size:0.9em; font-weight:bold; color:#1a2655; margin-left:1em;}
+
+	/* menu */
+	.menu-item-1 		{display: inline-block; position:relative; float:left;}
+	.menu-item-1:hover	{background: #47b4af;}
+	.menu-item-1 A 		{color:#fff;text-shadow: 1px 1px 1px darkslategray; text-decoration:none; font-size: 14px;
+    letter-spacing: normal; padding: 13px 12px; display:block;}
+
+	.sub-menu 			{display:none; position:absolute; top:45px; left:0px; background:#3c9591; z-index:999;}
+	.sub-menu-item		{box-sizing:border-box; width:200px; border-top:1px solid #47b4af; text-align:left; position:relative; }
+	.sub-menu-item:hover	{background:#47b4af;}
+
+        .sub-menu .sub-menu-item a, .sub-sub-menu .sub-sub-menu-item a, .sub-sub-sub-menu .sub-sub-sub-menu-item a {font-size: 14px; padding: 6px 12px;}
+
+	.sub-sub-menu, .sub-sub-sub-menu			{display:none; position:absolute; top:-1px; left:200px; background:#3c9591; }
+	.sub-sub-menu-item, .sub-sub-sub-menu-item		{box-sizing:border-box; width:200px; border-top:1px solid #47b4af; text-align:left; position:relative; }
+	.sub-sub-menu-item:hover, .sub-sub-sub-menu-item:hover	{background:#47b4af;}
+
+	.menuactive			{background:#47b4af;}
+
+	#img-search-button {visibility:hidden}
+	//IMG.menu-arrow-down {position:absolute; width:10px; left:50%; margin-left:-5px; bottom:4px;}
+        span.downarrow {border: 4px inset;content: "";display: block;height: 0;width: 0;border-color: rgba(255,255,255,.4)transparent transparent;border-top-style: solid;position: absolute;bottom: 5px;left: 45%;}
+        @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+            span.downarrow {
+                display:none;
+            }
+        }
+		.raquo::after {display: inline-block;border: none;content: "\00bb";float: right;}
+
+    .sub-menu.coursesMenu .sub-menu-item, .sub-menu.coursesMenu .sub-sub-menu-item, .sub-menu.coursesMenu .sub-sub-sub-menu-item {
+    	width: 174px;
+    }
+    .sub-menu.coursesMenu .sub-sub-menu, .sub-menu.coursesMenu .sub-sub-sub-menu {
+    	left: 174px;
+    }
+    .sub-menu.certificateMenu .sub-menu-item, .sub-menu.certificateMenu .sub-sub-menu-item {
+    	width: 207px;
+    }
+    .sub-menu.certificateMenu .sub-sub-menu {
+    	left: 207px;
+    }
+    .sub-menu.labmenu .sub-menu-item, .sub-menu.labmenu .sub-sub-menu-item {
+    	width: 195px;
+    }
+    .sub-menu.labmenu .sub-sub-menu {
+    	left: 195px;
+    }
+    .sub-menu.communitymenu .sub-menu-item, .sub-menu.communitymenu .sub-sub-menu-item {
+    	width: 165px;
+    }
+    .sub-menu.communitymenu .sub-sub-menu {
+    	left: 165px;
+    }
+    .sub-menu.aboutmenu .sub-menu-item, .sub-menu.aboutmenu .sub-sub-menu-item {
+    	width: 161px;
+    }
+    .sub-menu.aboutmenu .sub-sub-menu {
+    	left: 161px;
+    }
+    div.item-registration {
+    	  height:32px;
+    }
+    div.item-registration a {
+      	padding: 4px 12px !important;
+      	background: #fff !important;
+      	color: #3c9591 !important;
+      	text-shadow: none !important;
+      	border-radius: 4px;
+      	font-weight: bold;
+      	transition: all ease-in 0.2s;
+      	display: inline;
+      	position: relative;
+      	left: 12px;
+      	top: 5px;
+    }
+    div.item-registration a:hover {
+      	display:block;
+      	padding: 0 12px !important;
+      	left: 0;
+      	border-radius: 0;
+      	background: #47b4af !important;
+      	color:#fff !important;
+      	text-shadow: 1px 1px 1px darkslategrey !important;
+    }
+	div#ipython_notebook A IMG {margin-left:50px;}
+	/* OVERRIDE */
+	button#logout {display:none; }
+
+	span#breadcrumbContainer {color:#fff; font-weight:bold; font-family:'Ubuntu'; text-shadow: 1px 1px 1px darkslategrey;font-size: 14px; display: inline-block;
+    margin-top: 4px; margin-left:8px;}
+	#top a,
+	#top #breadcrumbContainer strong {color: #fff;font-family: 'Ubuntu';text-decoration: none; text-shadow: 1px 1px 1px darkslategray;display: inline-block;margin-top: 5px; font-weight: normal;}
+	#top #breadcrumbContainer sup {display: none;}
+	#breadcrumbContainer a {color:#fff !important; text-decoration:none !important;}
+	.menurefresher {color: #ddd; right: 5px;   position: absolute;}
+</style>
+<script type="text/javascript" src="/lab/js/jquery/jquery-3.0.0.min.js" ></script>
+<script>
+jQuery(document).ready(function(){
+
+	// MENU:
+	jQuery("DIV.menu-item-1").hover(function(){
+		jQuery(this).find("DIV.sub-menu").toggle();
+	});
+	//SUBMENU
+	jQuery("DIV.sub-menu-item").hover(function(){
+		jQuery(this).find("DIV.sub-sub-menu").toggle();
+	});
+  //SUBSUBMENU
+	jQuery("DIV.sub-sub-menu-item").hover(function(){
+		jQuery(this).find("DIV.sub-sub-sub-menu").toggle();
+	});
+
+	jQuery.ajax({
+		method: 'GET',
+		url: '/lab/getName.srv.php'
+	 })
+	.done(function( msg ) {
+		// firstname::::lastname::::nickname::::username;
+		var aUserinfo = msg.split('::::');
+		jQuery('div#userButton').html(aUserinfo[0].substr(0,1));
+		jQuery('div#divAccountInfoUpCircle').html(aUserinfo[0].substr(0,1));
+		jQuery('span#spanAccountInfoUpName').html(aUserinfo[0] + ' ' + aUserinfo[1]);
+		jQuery('span#spanAccountInfoUpEmail').html(aUserinfo[3]);
+	})
+	.fail(function( msg ) {
+		alert( "Error: " + msg );
+	});
+	// Set div#site new height:
+	docHeight = jQuery(document).height();
+	headerHeight = jQuery('HEADER').height();
+	newHeight = parseInt(docHeight) - parseInt(headerHeight)-110;
+	//jQuery("DIV#site").height(newHeight);
+	setTimeout(
+		function(){
+			jQuery("DIV#site").attr('style', 'height:'+newHeight+'px !important; display:block; color:red;' );
+		},
+		2000
+	);
+
+	//$(window).on('resize',function(){location.reload();});
+});
+</script>
+</head>
+
+<body class="edit_app "
+ 
+data-base-url="/lab/code/python/user/muyu0117%40live.cn/"
+data-file-path="Databases/GlobalDatabases/db_VarianceSwap.mat"
+
+  
+ 
+
+dir="ltr">
+<header>
+	<div id="header-bottom">
+		<nav class="header-containter"  style="margin: 0 auto; max-width:1000px; border:0px solid red; text-align:left;">
+			<div class="menu-item-img" style="margin-left:0; float:left; margin-top:10px;"><a href="/"><img src="/lab/imgheader/header-logo.png" style="width:224px; height:auto; margin-right:30px;" /></a></div>
+  			<div class="menu-item-1 menuactive">
+          <a href="/lab/">Lab <span class="downarrow"></span></a>
+          <div class="sub-menu labmenu">
+              <div class="sub-menu-item"><a href="/lab/">Overview</a></div>
+              <div class="sub-menu-item"><a href="/lab/books.php?page=theory">Theory</a></div>
+              <div class="sub-menu-item"><a href="/lab/videos/">Simulation clips</a></div>
+              <div class="sub-menu-item"><a href="/lab/case-studies/">Case studies</a></div>
+              <div class="sub-menu-item"><a class="raquo" href="/lab/code/">Code</a>
+					<div class="sub-sub-menu">
+		              	<div class="sub-sub-menu-item"><a href="/lab/code/">Overview</a></div>
+		                <div class="sub-sub-menu-item"><a class="raquo" href="/lab/code/python/">Python</a>
+								<div class="sub-sub-sub-menu" style="left:195px">
+					              	<div class="sub-sub-sub-menu-item"><a href="/lab/code/python/">Jupyter Notebook</a></div>
+					              	<div class="sub-sub-sub-menu-item"><a href="/lab/code/python/user/arpm/lab">Jupyter Lab (Beta)</a></div>
+								</div>
+						</div>
+		                <div class="sub-sub-menu-item"><a class="raquo" href="/lab/code/python/">MATLAB</a>
+								<div class="sub-sub-sub-menu" style="left:195px">
+					              	<div class="sub-sub-sub-menu-item"><a href="/lab/code/python/">Jupyter Notebook</a></div>
+					              	<div class="sub-sub-sub-menu-item"><a href="/lab/code/python/user/arpm/lab">Jupyter Lab (Beta)</a></div>
+								</div>
+						</div>
+		                <div class="sub-sub-menu-item"><a class="raquo" href="/lab/code/documentation/">Documentation</a>
+								<div class="sub-sub-sub-menu" style="left:195px">
+					              	<div class="sub-sub-sub-menu-item"><a href="/lab/books.php?page=scripts">Scripts</a></div>
+					              	<div class="sub-sub-sub-menu-item"><a href="/lab/books.php?page=functions">Functions</a></div>
+								</div>
+						</div>
+					</div>
+				</div>
+          <div class="sub-menu-item"><a href="/lab/books.php?page=exercise">Exercises</a></div>
+          <div class="sub-menu-item"><a href="/lab/slides/">Slides</a></div>
+          <div class="sub-menu-item"><a href="/mooc/program/">Video lectures</a></div>
+          <div class="sub-menu-item item-registration"><a href="/packages/">Registration</a></div>
+          </div>
+      </div>
+      <div class="menu-item-1"><a href="/courses/">Courses <span class="downarrow"></span></a>
+        <div class="sub-menu coursesMenu">
+          <div class="sub-menu-item"><a href="/courses/">Overview</a></div>
+          <div class="sub-menu-item"><a class="raquo" href="/mooc/">MOOC</a>
+            <div class="sub-sub-menu">
+              <div class="sub-sub-menu-item"><a href="/mooc/">Overview</a></div>
+              <div class="sub-sub-menu-item"><a href="/mooc/program/">Program details</a></div>
+              <div class="sub-sub-menu-item item-registration"><a href="/mooc/registration/">Registration</a></div>
+            </div>
+          </div>
+          <div class="sub-menu-item"><a class="raquo" href="/bootcamp/">Bootcamp</a>
+          <div class="sub-sub-menu">
+              <div class="sub-sub-menu-item"><a href="/bootcamp/">Overview</a></div>
+                    <div class="sub-sub-menu-item"><a class="raquo" href="/bootcamp/program/">Program details</a>
+                      <div class="sub-sub-sub-menu">
+                        <div class="sub-sub-sub-menu-item"><a href="/bootcamp/program/day-1/">Bootcamp - day 1</a></div>
+                        <div class="sub-sub-sub-menu-item"><a href="/bootcamp/program/day-2/">Bootcamp - day 2</a></div>
+                        <div class="sub-sub-sub-menu-item"><a href="/bootcamp/program/day-3/">Bootcamp - day 3</a></div>
+                        <div class="sub-sub-sub-menu-item"><a href="/bootcamp/program/day-4/">Bootcamp - day 4</a></div>
+                        <div class="sub-sub-sub-menu-item"><a href="/bootcamp/program/day-5/">Bootcamp - day 5</a></div>
+                        <div class="sub-sub-sub-menu-item"><a href="/bootcamp/program/day-6/">Bootcamp - day 6</a></div>
+                    </div>
+                </div>
+              <div class="sub-sub-menu-item"><a class="raquo" href="/bootcamp/networking/">Networking</a>
+                <div class="sub-sub-sub-menu">
+                  <div class="sub-sub-sub-menu-item"><a href="/bootcamp/networking/">Social mixer</a></div>
+                  <div class="sub-sub-sub-menu-item"><a href="/bootcamp/networking/">Gala dinner</a></div>
+                  <div class="sub-sub-sub-menu-item"><a href="/community/alumni/">Alumni connector</a></div>
+                </div>
+              </div>
+              <div class="sub-sub-menu-item"><a href="/bootcamp/bootcamp-brochure/">Brochure</a></div>
+              <div class="sub-sub-menu-item"><a href="/bootcamp/attendees/">Who is it for?</a></div>
+              <div class="sub-sub-menu-item"><a href="/bootcamp/faq/">FAQ</a></div>
+              <div class="sub-sub-menu-item item-registration"><a href="/bootcamp/registration/">Registration</a></div>
+            </div>
+          </div>
+          <div class="sub-menu-item"><a class="raquo" href="/marathon/">Marathon</a>
+            <div class="sub-sub-menu">
+              <div class="sub-sub-menu-item"><a href="/marathon/">Overview</a></div>
+              <div class="sub-sub-menu-item"><a class="raquo" href="/marathon/program/">Program details</a>
+					<div class="sub-sub-sub-menu">
+	                	<div class="sub-sub-sub-menu-item" style="width:240px;"><a href="/marathon/program/refresher/">Mathematics <span class="menurefresher">refresher</span></a></div>
+	                	<div class="sub-sub-sub-menu-item" style="width:240px;"><a href="/marathon/program/refresher/">Jupyter <span class="menurefresher">refresher</span></a></div>
+	                	<div class="sub-sub-sub-menu-item" style="width:240px;"><a href="/marathon/program/refresher/">MATLAB <span class="menurefresher">refresher</span></a></div>
+	                	<div class="sub-sub-sub-menu-item" style="width:240px;"><a href="/marathon/program/level-1/">Fin. Engineering for Investment</a></div>
+	                	<div class="sub-sub-sub-menu-item" style="width:240px;"><a href="/marathon/program/level-1/">Data Science for Finance</a></div>
+	                	<div class="sub-sub-sub-menu-item" style="width:240px;"><a href="/marathon/program/level-2/">Quant. Risk Management</a></div>
+	                	<div class="sub-sub-sub-menu-item" style="width:240px;"><a href="/marathon/program/level-2/">Quant. Portf. Management</a></div>
+                	</div>					
+			  </div>
+              <!-- <div class="sub-sub-menu-item"><a href="/marathon/career-service/">Career service</a></div> -->
+              <div class="sub-sub-menu-item"><a href="/marathon/marathon-brochure/">Brochure</a></div>
+              <div class="sub-sub-menu-item"><a href="/marathon/attendees/">Who is it for?</a></div>
+              <div class="sub-sub-menu-item"><a href="/marathon/faq/">FAQ</a></div>
+ 
+              <div class="sub-sub-menu-item item-registration"><a href="/bootcamp/registration/">Registration</a></div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="menu-item-1"><a href="/certificate/">Certificate <span class="downarrow"></span></a>
+        <div class="sub-menu certificateMenu">
+          <div class="sub-menu-item"><a href="/certificate/">Overview</a></div>
+          <div class="sub-menu-item"><a class="raquo" href="/certificate/body-of-knowledge/">Body of knowledge</a>
+            <div class="sub-sub-menu">
+              <div class="sub-sub-menu-item" style="width:240px;"><a href="/certificate/body-of-knowledge/financial-engineering/">Fin. Engineering for Investment</a></div>
+              <div class="sub-sub-menu-item" style="width:240px;"><a href="/certificate/body-of-knowledge/data-science-for-finance/">Data Science for Finance</a></div>
+              <div class="sub-sub-menu-item" style="width:240px;"><a href="/certificate/body-of-knowledge/risk-management/">Quant. Risk Management</a></div>
+              <div class="sub-sub-menu-item" style="width:240px;"><a href="/certificate/body-of-knowledge/portfolio-management/">Quant. Portf. Management</a></div>
+            </div>
+          </div>
+          <div class="sub-menu-item"><a href="/certificate/exams/">Exams</a></div>
+          <div class="sub-menu-item"><a href="/certificate/how-to-prepare/">How to prepare</a></div>
+          <div class="sub-menu-item"><a href="/certificate/faq/">FAQ</a></div>
+          <div class="sub-menu-item item-registration"><a href="/certificate/registration/">Registration</a></div>
+        </div>
+      </div>
+      <div class="menu-item-1"><a href="/packages/">Packages</a></div>
+      <div class="menu-item-1"><a href="/community/">Community <span class="downarrow"></span></a>
+        <div class="sub-menu communitymenu">
+          <div class="sub-menu-item"><a href="/membership">Membership</a></div>
+          <div class="sub-menu-item"><a href="https://www.linkedin.com/groups/3825142" target="_blank">Discussions</a></div>
+          <div class="sub-menu-item"><a href="/alumni/">Alumni</a></div>
+          <div class="sub-menu-item"><a href="/events/">Events</a></div>
+          <div class="sub-menu-item"><a href="/universities/">Partner universities</a></div>
+          <div class="sub-menu-item"><a href="/book/">Book</a></div>
+        </div>
+      </div>
+      <div class="menu-item-1"><a href="/about/">About <span class="downarrow"></span></a>
+        <div class="sub-menu aboutmenu">
+          <div class="sub-menu-item"><a href="/testimonials/">Testimonials</a></div>
+          <div class="sub-menu-item"><a href="/about/">ARPM</a></div>
+          <div class="sub-menu-item"><a href="/advisory-board/">Advisory board</a></div>
+          <div class="sub-menu-item"><a href="/attilio-meucci/">Attilio Meucci</a></div>
+          <div class="sub-menu-item"><a href="/one-more-reason/">Charity</a></div>
+          <div class="sub-menu-item"><a href="/contact-us/">Contact</a></div>
+        </div>
+      </div>
+			<div id="header-login"  class="menu-item-11" style="padding-top:0px; padding-bottom:0px; float:right; ">
+				
+					<!-- <a href="/lab/python/logout"><img src="https://www.arpm.co/wordpress/wp-content/themes/JointsWP/assets/images/logout.png" style="margin-top: 7px;"></a> -->
+					<!-- ########################################################## -->
+
+					  <div style="/* :*/ position:relative; text-shadow:none; line-height:normal; text-align:left">
+
+						  <a href="#" onclick="jQuery('#divAccountInfo').toggle('fast');" style="text-decoration:none;"><div style="box-sizing:border-box; width:28px; height:28px; border-radius:14px; color:#3C9591; font-size:18px;  text-align:center; background-color:#fff; margin-top:7px; padding-top:3px;" id="userButton">A</div></a>
+						  <div id="divAccountInfo" style="display:none; position:absolute; right:-35px; top:60px; width:330px; height:185px; background-color:#fff; border:1px solid #ddd; box-shadow:0 2px 10px rgba(0,0,0,.2); font-weight:normal; letter-spacing:normal; z-index:1000">
+
+							<div class="arrow-up" style="position:absolute; top:-10px; left:270px; width:0; height:0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid #fff;"></div>
+
+							<div id="divAccountInfoUp" style="margin:10px; ">
+								<div id="divAccountInfoUpCircle" style="box-sizing:border-box; width:100px; height:100px; border-radius:50px; background-color:#3C9591; float:left; font-size:60px; color:#fff; text-align:center; padding-top:10px; margin-right:20px;  ">
+									A
+								</div>
+								<div id="divAccountInfoUpName" >
+									<div style="/* WP setting:*/ font-size:14px;">
+										<strong><span id="spanAccountInfoUpName">John</span></strong><br>
+										<span id="spanAccountInfoUpEmail">Smith</span><br>
+									</div>
+									<div style="box-sizing:border-box; width:170px; height:30px; margin-top:30px; background-color:#4D90FE; color:#fff; float:left; border-radius:2px; padding:5px; text-align:center; ">
+										<a href="/users/profile.php" style="color:#fff; text-decoration:none; font-size:12px; font-weight:bold; ">Manage your profile</a>
+									</div>
+								</div>
+							 </div>
+
+							<div id="divAccountInfoDown" style="position:absolute; bottom:0px; height:50px; width:100%; box-sizing:border-box; background-color:#f5f5f5; border-top:1px solid #ddd; padding:10px;" >
+								<div style="box-sizing:border-box; width:70px; height:30px; position:relative; left:222px; background-color:#f8f8f8; border-radius:2px; border:1px solid #ddd; padding:5px; text-align:center; ">
+									<a href="/lab/code/python/logout" style="color:#999; text-decoration:none; font-size:12px; font-weight:bold; ">Logout</a>
+								</div>
+							</div>
+
+						</div> <!-- //divAccountInfo -->
+
+					</div>
+
+                    <!-- ########################################################## -->
+
+
+				
+			</div>
+			<div class="onRight" style="width:25px; height:25px; margin-top:10px; margin-right:20px; "><img src="/lab/imgheader/search_button.png" style="width:100%; height:100%;" id="img-search-button" /></div>
+
+		</nav>
+
+
+
+	</div>
+</header>
+
+<noscript>
+    <div id='noscript'>
+      Jupyter Notebook requires JavaScript.<br>
+      Please enable it to proceed. 
+  </div>
+</noscript>
+
+<div id="header">
+  <div id="header-container" class="container">
+  <span id="breadcrumbContainer"><strong style="position:absolute; top: 8px; left:60px;"><a href="/lab/code/">Code</a></strong></span>
+  <div id="ipython_notebook" class="nav navbar-brand"><a href="/lab/code/python/user/muyu0117@live.cn/tree" title='dashboard'>
+      <img src='/lab/code/python/user/muyu0117@live.cn/static/base/images/logo.png?v=641991992878ee24c6f3826e81054a0f' alt='Jupyter Notebook'/>
+  </a></div>
+
+
+  
+  
+  
+  
+
+    <span id="login_widget">
+      
+        <button id="logout" class="btn btn-sm navbar-btn">Logout</button>
+      
+    </span>
+
+  
+
+  
+  
+  
+
+<span id="save_widget" class="pull-left save_widget">
+    <span class="filename"></span>
+    <span class="last_modified"></span>
+</span>
+
+
+  </div>
+  <div class="header-bar"></div>
+
+  
+
+<div id="menubar-container" class="container">
+  <div id="menubar">
+    <div id="menus" class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+          <p  class="navbar-text indicator_area">
+          <span id="current-mode" >current mode</span>
+          </p>
+        <button type="button" class="btn btn-default navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <i class="fa fa-bars"></i>
+          <span class="navbar-text">Menu</span>
+        </button>
+        <ul class="nav navbar-nav navbar-right">
+          <li id="notification_area"></li>
+        </ul>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">File</a>
+              <ul id="file-menu" class="dropdown-menu">
+                <li id="new-file"><a href="#">New</a></li>
+                <li id="save-file"><a href="#">Save</a></li>
+                <li id="rename-file"><a href="#">Rename</a></li>
+                <li id="download-file"><a href="#">Download</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Edit</a>
+              <ul id="edit-menu" class="dropdown-menu">
+                <li id="menu-find"><a href="#">Find</a></li>
+                <li id="menu-replace"><a href="#">Find &amp; Replace</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Key Map</li>
+                <li id="menu-keymap-default"><a href="#">Default<i class="fa"></i></a></li>
+                <li id="menu-keymap-sublime"><a href="#">Sublime Text<i class="fa"></i></a></li>
+                <li id="menu-keymap-vim"><a href="#">Vim<i class="fa"></i></a></li>
+                <li id="menu-keymap-emacs"><a href="#">emacs<i class="fa"></i></a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">View</a>
+              <ul id="view-menu" class="dropdown-menu">
+              <li id="toggle_header" title="Show/Hide the logo and notebook title (above menu bar)">
+              <a href="#">Toggle Header</a></li>
+              <li id="menu-line-numbers"><a href="#">Toggle Line Numbers</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Language</a>
+              <ul id="mode-menu" class="dropdown-menu">
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="lower-header-bar"></div>
+
+
+</div>
+
+<div id="site">
+
+
+<div id="texteditor-backdrop">
+<div id="texteditor-container" class="container"></div>
+</div>
+
+
+</div>
+
+
+
+
+
+
+    
+
+
+<script src="/lab/code/python/user/muyu0117@live.cn/static/edit/js/main.min.js?v=70ee9ac2ae9a9640d6c459b2c141534b" type="text/javascript" charset="utf-8"></script>
+
+
+<script type='text/javascript'>
+  function _remove_token_from_url() {
+    if (window.location.search.length <= 1) {
+      return;
+    }
+    var search_parameters = window.location.search.slice(1).split('&');
+    for (var i = 0; i < search_parameters.length; i++) {
+      if (search_parameters[i].split('=')[0] === 'token') {
+        // remote token from search parameters
+        search_parameters.splice(i, 1);
+        var new_search = '';
+        if (search_parameters.length) {
+          new_search = '?' + search_parameters.join('&');
+        }
+        var new_url = window.location.origin + 
+                      window.location.pathname + 
+                      new_search + 
+                      window.location.hash;
+        window.history.replaceState({}, "", new_url);
+        return;
+      }
+    }
+  }
+  _remove_token_from_url();
+</script>
+</body>
+
+</html>
