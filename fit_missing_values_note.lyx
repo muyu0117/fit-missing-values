@@ -1,0 +1,384 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Fit Missing Values
+\end_layout
+
+\begin_layout Author
+Yu Mu
+\end_layout
+
+\begin_layout Date
+Jan.
+ 22th, 2018
+\end_layout
+
+\begin_layout Abstract
+This note is the summary of how to fit missing values in stock market.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction 
+\end_layout
+
+\begin_layout Standard
+When doing research with financial data one issue we cannot avoid is that
+ there are missing values and outliers in the data we have.
+ For example, in Chinese stock market data, due to strict regulation of
+ Chinese stock market, trading suspension is pervasive to all stocks, meaning
+ for a couple days or even weeks stock' prices wouldn't change (or missing)
+ if it is suspended.
+ In order to estimate interdependent (or covariance) relationship during
+ those periods fitting missing values will be needed.
+ 
+\end_layout
+
+\begin_layout Standard
+If we represent our realized time series 
+\begin_inset Formula $\left\{ \boldsymbol{\epsilon}_{t}\right\} _{t=1}^{T}$
+\end_inset
+
+ as an 
+\begin_inset Formula $S\times T$
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+fat
+\begin_inset Quotes erd
+\end_inset
+
+ panel of observations, where 
+\begin_inset Formula $S$
+\end_inset
+
+ denotes the number of stocks and 
+\begin_inset Formula $T$
+\end_inset
+
+ denotes time.
+ We can always remove from the panel the columns with missing data, thereby
+ obtaining a full, yet shorter, panel.
+ However, in this way we could waste many precious data especially in Chinese
+ market research where historical data is limited.
+ On the other hand, if we just throw random data in those missing values
+ we would destroy the interdependent relationship in the data and come up
+ with a bad estimation.
+ That's why the issue of missing values has to be handled correctly.
+ 
+\end_layout
+
+\begin_layout Standard
+There are several approaches introduced in literature for this problem (See
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Little2002"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Little2002,Liu&Rubin1998"
+
+\end_inset
+
+) and most of them rely on the application of EM algorithm.
+ 
+\end_layout
+
+\begin_layout Section
+Randomly missing data 
+\end_layout
+
+\begin_layout Standard
+The first problem we want to solve is when there are randomly missing data
+ in our panel.
+ At each time 
+\begin_inset Formula $t$
+\end_inset
+
+, some invariants realizations might not be available.
+ If we model joint realization as multivariate 
+\begin_inset Formula $t$
+\end_inset
+
+ distribution we will have: 
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+\boldsymbol{\epsilon}_{na_{t}}\\
+\boldsymbol{\epsilon}_{a_{t}}
+\end{array}\right)\sim t\left(\left(\begin{array}{c}
+\boldsymbol{\mu}_{na_{t}}\\
+\boldsymbol{\mu}_{a_{t}}
+\end{array}\right),\left(\begin{array}{cc}
+\boldsymbol{\sigma}_{na_{t},na_{t}}^{2} & \boldsymbol{\sigma}_{na_{t},a_{t}}^{2}\\
+\boldsymbol{\sigma}_{a_{t},na_{t}}^{2} & \boldsymbol{\sigma}_{a_{t},a_{t}}^{2}
+\end{array}\right),v\right)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $na_{t}$
+\end_inset
+
+ denotes the missing data, and we partition accordingly the location parameter
+ 
+\begin_inset Formula $\boldsymbol{\mu}$
+\end_inset
+
+ and the dispersion matrix 
+\begin_inset Formula $\boldsymbol{\sigma}^{2}$
+\end_inset
+
+.
+ It's well known that multivariate student 
+\begin_inset Formula $t$
+\end_inset
+
+ distribution can be represented in Normal Variance Mixture form (See 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "McNeil2005"
+
+\end_inset
+
+).
+ If a 
+\begin_inset Formula $S$
+\end_inset
+
+ dimensional random variable 
+\begin_inset Formula $\boldsymbol{\epsilon}_{t}$
+\end_inset
+
+ follows the multivariate 
+\begin_inset Formula $t$
+\end_inset
+
+ distribution 
+\begin_inset Formula $t_{S}\left(\boldsymbol{\mu},\boldsymbol{\sigma}^{2},v\right)$
+\end_inset
+
+, we can have 
+\begin_inset Formula $\boldsymbol{\epsilon}_{t}$
+\end_inset
+
+ follows multivariate normal distribution given the weight 
+\begin_inset Formula $\tau$
+\end_inset
+
+, with 
+\begin_inset Formula $v\tau$
+\end_inset
+
+ follows 
+\begin_inset Formula $\chi_{v}^{2}$
+\end_inset
+
+.
+ Equivlently,
+\begin_inset Formula 
+\[
+\boldsymbol{\epsilon}_{t}\mid\boldsymbol{\mu},\boldsymbol{\sigma}^{2},v,\tau\sim N_{S}\left(\boldsymbol{\mu},\boldsymbol{\sigma}^{2}/\tau\right)
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\[
+\tau\mid\boldsymbol{\mu},\boldsymbol{\sigma}^{2},v\sim Gamma\left(v/2,v/2\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Further critical properties of the multivariate 
+\begin_inset Formula $t$
+\end_inset
+
+ concern its marginal and conditional distributions.
+ For 
+\begin_inset Formula $\left(\begin{array}{c}
+\boldsymbol{\epsilon}_{x}\\
+\boldsymbol{\epsilon}_{y}
+\end{array}\right)$
+\end_inset
+
+, where the dimensions of 
+\begin_inset Formula $\boldsymbol{\epsilon}_{x}$
+\end_inset
+
+ and 
+\begin_inset Formula $\boldsymbol{\epsilon}_{y}$
+\end_inset
+
+ are 
+\begin_inset Formula $S_{x}$
+\end_inset
+
+ and 
+\begin_inset Formula $S_{y}$
+\end_inset
+
+, respectively.
+ Given 
+\begin_inset Formula $\tau$
+\end_inset
+
+, we have the well-known normal results: 
+\begin_inset Formula 
+\[
+\boldsymbol{\epsilon}_{x}\mid\boldsymbol{\mu},\boldsymbol{\sigma}^{2},v,\tau\sim N_{S_{x}}\left(\boldsymbol{\mu}_{x},\boldsymbol{\sigma}_{x}^{2}/\tau\right)
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula 
+\[
+\boldsymbol{\epsilon}_{y}\mid\boldsymbol{\epsilon}_{x},\boldsymbol{\mu},\boldsymbol{\sigma}^{2},v,\tau\sim N_{S_{y}}\left(\boldsymbol{\mu}_{y\mid x},\boldsymbol{\sigma}_{y\mid x}^{2*}/\tau\right)
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula 
+\begin{eqnarray*}
+\boldsymbol{\mu}_{y\mid x} & = & \boldsymbol{\mu}_{y}-\boldsymbol{\sigma}_{y,x}^{2}\boldsymbol{\sigma}_{x}^{-2}\left(\boldsymbol{\epsilon}_{x}-\boldsymbol{\mu}_{x}\right)\\
+\boldsymbol{\sigma}_{y\mid x}^{2*} & = & \boldsymbol{\sigma}_{y}^{2}-\boldsymbol{\sigma}_{y,x}^{2}\boldsymbol{\sigma}_{x}^{-2}\boldsymbol{\sigma}_{x,y}^{2}
+\end{eqnarray*}
+
+\end_inset
+
+For marginal distribution we have: 
+\begin_inset Formula 
+\[
+\boldsymbol{\epsilon}_{x}\sim t_{S_{x}}\left(\boldsymbol{\mu}_{x},\boldsymbol{\sigma}_{x}^{2},v\right)
+\]
+
+\end_inset
+
+It's been derived in , the conditional distribution of 
+\begin_inset Formula $\boldsymbol{\epsilon}_{y}$
+\end_inset
+
+ given 
+\begin_inset Formula $x$
+\end_inset
+
+is 
+\begin_inset Formula $t_{S_{y}}\left(\boldsymbol{\mu}_{y\mid x},\boldsymbol{\sigma}_{y\mid x}^{2},v+S_{x}\right)$
+\end_inset
+
+ where 
+\begin_inset Formula 
+\[
+\boldsymbol{\sigma}_{y\mid x}^{2}=\boldsymbol{\sigma}_{y\mid x}^{2*}\left[\frac{v+\delta_{x}\left(\boldsymbol{\mu}_{x},\boldsymbol{\sigma}_{x}^{2}\right)}{v+S_{x}}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "/Users/yumu/Desktop/reference/library"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

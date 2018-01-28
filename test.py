@@ -23,6 +23,7 @@ from RollPrices2YieldToMat import RollPrices2YieldToMat
 from PlotTwoDimEllipsoid import PlotTwoDimEllipsoid
 from DiffLengthMLFP import DiffLengthMLFP
 from ColorCodedFP import ColorCodedFP
+from EMalgorithmFP import EMalgorithmFP
 
 
 db = loadmat(os.path.join(GLOBAL_DB, 'db_SwapCurve.mat'), squeeze_me=True)
@@ -55,7 +56,6 @@ flex_prob = exp((-lam * arange(t_, 1 + -1, -1)))
 flex_prob = flex_prob / npsum(flex_prob)
 flex_prob = flex_prob.reshape(1,-1)
 tol = 10 ** -6
-import pdb; pdb.set_trace()  # breakpoint 3ab45d04 //
 mu_all, s2_all, _ = MaxLikelihoodFPLocDispT(dy, flex_prob.reshape(1,-1), nu, tol, 1)
 mu_all = mu_all.reshape(-1,1)
 
@@ -63,6 +63,7 @@ mu_all = mu_all.reshape(-1,1)
 epsi_25 = dy[[1, 3], :]
 mu_all_25 = mu_all[[1, 3]]
 s2_all_25 = s2_all[np.ix_([1, 3], [1, 3])]
+import pdb; pdb.set_trace()  # breakpoint 0ab4371c //
 
 ## Series of different len: drop the first 300 observations from the 2yr and 5yr series
 
@@ -71,6 +72,7 @@ epsi = dy
 epsi[[1, 3], :r] = np.NaN
 
 ## Maximum likelihood with Flex. Probs. - different len
+mu_test, sigma2_test = EMalgorithmFP(epsi, flex_prob, nu, tol)
 
 mu_DLFP, s2_DLFP = DiffLengthMLFP(epsi, flex_prob.reshape(1,-1), nu, tol)
 mu_DLFP_25 = mu_DLFP.reshape(-1,1)[[1, 3]]
@@ -83,8 +85,6 @@ flex_prob_trunc = flex_prob[[0],r:] / sum(flex_prob[0,r:])
 mu_trunc, s2_trunc, _ = MaxLikelihoodFPLocDispT(epsi[:, r:], flex_prob_trunc, 4, 10 ** -6, 1)
 mu_trunc_25 = mu_trunc.reshape(-1,1)[[1, 3]]
 s2_trunc_25 = s2_trunc[np.ix_([1, 3], [1, 3])]
-
-
 
 ## Figure
 

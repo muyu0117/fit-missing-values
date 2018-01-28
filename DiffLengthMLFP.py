@@ -107,7 +107,7 @@ def DiffLengthMLFP(epsi,p,nu,threshold,smartinverse=0,maxiter=10**5):
         gamma = (nu_c/(nu+Mah))*s2[c]+beta[c].dot(sig2).dot(beta[c].T)
         # sig2 = r_[r_['-1',sig2, sig2@beta[c].T], r_['-1', beta[c]@sig2, gamma]]
         sig2 = r_[r_['-1', sig2, sig2.dot(beta[c].T)], r_['-1', beta[c].dot(sig2), gamma]]
-        sig2=(sig2+sig2.T)/2
+        sig2 = (sig2+sig2.T)/2
         # mu = r_[mu, alpha[c].reshape(-1,1)+beta[c]@mu]
         mu = r_[mu, alpha[c].reshape(-1, 1) + beta[c].dot(mu)]
 
